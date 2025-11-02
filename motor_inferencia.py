@@ -9,8 +9,6 @@ import knowledge_base #Base de conocimientos importada
 #contador de variables global, para renombrar variables
 VAR_COUNTER = 0
 
-#Paso 1:  Base de conocimeinto (Vamos a importar la base de conocimientos de otro .py
-KB_LICENCIAS = knowledge_base.LICENCIAS
 
 #Estas son nuestas funciones para manejo de variables
 #NOTA IMPORTANTE: no se te olvide ponerlas en otro archivo
@@ -172,7 +170,7 @@ def sld_solve(kb, query):
     query_inicial = [query] 
     soluciones_encontradas = 0
 
-    for i, (solucion, ruta) in enumerate(solve(KB_LICENCIAS, query_inicial, {}, [])):
+    for i, (solucion, ruta) in enumerate(solve(kb, query_inicial, {}, [])): 
         soluciones_encontradas += 1
         print(f"Solución {soluciones_encontradas}")
         
@@ -197,22 +195,42 @@ def sld_solve(kb, query):
 # --- Ejecución Principal ---
 if __name__ == "__main__":
     
-
-    print("   Demostración de Resolución SLD        ")
-
-
-    # --- Query 1: ¿Cuánto debe pagar 'ana' por 'reposicion'? ---
-    query1 = ('debe_pagar', 'ana', 'reposicion', 'Costo')
-    sld_solve(KB_LICENCIAS, query1)
     
+    print("--- Demostración de Consultas LegalMente ---")
 
+    # Caso 1: Probar Regla 15 (¿Requiere pago la licencia?)
+    query1 = ('requiere_pago', 'expedicion_licencia')
+    # sld_solve(KB_LEGALMENTE, query1)
+    # SALIDA ESPERADA: Verdadero (True)
 
-    # --- Query 2: ¿Quién (Persona) necesita 'expedicion'? ---
-    query2 = ('solicita_tramite', 'juan', 'expedicion')
-    sld_solve(KB_LICENCIAS, query2)
+    # Caso 2: Probar Regla 1 (¿Dónde pago la licencia si no es en línea?)
+    query2 = ('lugar_de_pago_fisico', 'expedicion_licencia', 'Lugar')
+    # sld_solve(KB_LEGALMENTE, query2)
+    # SALIDA ESPERADA: Lugar = Recaudacion de Rentas Ensenada
 
+    # Caso 3: Probar Regla 13 (¿Qué necesita un tercero para el refrendo?)
+    query3 = ('requiere_para_tercero', 'refrendo_tarjeta_circulacion', 'Requisito')
+    # sld_solve(KB_LEGALMENTE, query3)
+    # SALIDA ESPERADA: 
+    #   Requisito = carta_poder
+    #   Requisito = identificacion_interesado
+    #   Requisito = identificacion_gestor
 
-    
-    # --- Query 3: ¿'pedro' es ciudadano? (Query que falla) ---
-    query3 = ('es_ciudadano', 'pedro')
-    sld_solve(KB_LICENCIAS, query3)
+    # Caso 4: Probar Regla 6 (¿Puede 'juan' iniciar un trámite local?)
+    query4 = ('es_apto_para_tramite_local', 'juan_cano')
+    # sld_solve(KB_LEGALMENTE, query4)
+    # SALIDA ESPERADA: Verdadero (True)
+
+    # Caso 5: Consulta de Hechos (Obtener todos los costos del pasaporte)
+    query5 = ('costo', 'pasaporte', 'Vigencia', 'Precio')
+    # sld_solve(KB_LEGALMENTE, query5)
+    # SALIDA ESPERADA: 
+    #   Vigencia = 1_anio, Precio = 885.0
+    #   Vigencia = 3_anios, Precio = 1730.0
+    #   ... (etc.)
+
+    # Caso 6: Consulta de Hechos (Obtener requisitos para alta de vehículo)
+    query6 = ('requiere', 'alta_vehiculo', 'Requisito')
+    # sld_solve(KB_LEGALMENTE, query6)
+    # (No hemos añadido requisitos para alta_vehiculo, así que saldría Falso)
+    # Esto te muestra dónde necesitas seguir poblando la BC.
