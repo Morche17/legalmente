@@ -2,9 +2,6 @@
 Base de Conocimiento (BC) para el sistema LegalMente.
 Contiene todos los hechos y reglas lógicas sobre los 15 trámites
 gubernamentales en Ensenada, B.C., para Octubre de 2025.
-
-(Versión CORREGIDA: Los hechos 'subtipo_de' están en la
-lista 'hechos', no en 'reglas')
 """
 
 KB_LEGALMENTE = {
@@ -288,7 +285,8 @@ KB_LEGALMENTE = {
         ('lugar_pago', 'pasaporte', 'banco_autorizado'),
         ('banco_autorizado_pasaporte', 'banjercito'),
         ('banco_autorizado_pasaporte', 'banorte'),
-        # ... (y el resto de los bancos) ...
+        ('banco_autorizado_pasaporte', 'bbva'),
+        ('banco_autorizado_pasaporte', 'santander'),
         
         # --- Hechos: Condiciones y Notas (Vehículos) ---
         ('tipo_pago_aceptado', 'Recaudacion de Rentas Ensenada', 'efectivo'),
