@@ -82,7 +82,7 @@ def main():
     Bucle principal de la aplicación interactiva
     """
     print("====================================")
-    print("  Bienvenido a LegalMente v2.0    ")
+    print("  Bienvenido a LegalMente v0.5    ")
     print("====================================")
     print("Motor de Inferencia SLD conectado.")
     
