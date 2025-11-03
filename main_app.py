@@ -51,6 +51,22 @@ def gestionar_residencia():
             # Añadimos un hecho temporal solo para esta sesión
             HECHOS_SESION.append(('reside_en_ensenada', 'usuario_actual'))
             print("Validado. Tienes acceso a trámites locales.")
+            print(f"\n","+"*10, " Lista de trámites ", "+"*10)
+            print('→ acta_nacimiento')
+            print('→ expedicion_licencia')
+            print('→ revalidacion_licencia')
+            print('→ refrendo_tarjeta_circulacion')
+            print('→ constancia_antecedentes_penales')
+            print('→ reposicion_licencia')
+            print('→ alta_vehiculo')
+            print('→ baja_vehiculo')
+            print('→ cambio_propietario_vehiculo')
+            print('→ reposicion_tarjeta_circulacion')
+            print('→ reposicion_placas_circulacion')
+            print('→ permiso_traslado_vehicular')
+            print('→ acta_matrimonio')
+            print('→ acta_defuncion')
+            print('→ pasaporte')
             break
         elif respuesta == 'n':
             print("Advertencia: No podrás realizar trámites que requieren residencia local.")
@@ -101,7 +117,7 @@ def main():
             print("Gracias por usar LegalMente. ¡Hasta pronto!")
             break
         
-        if opcion in ('1', '2'):
+        if opcion in ('1', '2'):            
             # --- Validación de Entrada (Reglas 4, 5, 14) ---
             tramite = input("Escribe el nombre del trámite (ej. expedicion_licencia): ").strip().lower()
             
