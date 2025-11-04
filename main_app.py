@@ -129,6 +129,7 @@ def checar_permiso_tramite(tramite):
 def main():
     """
     Bucle principal de la aplicación interactiva
+    puro asqii, viva jesus y la terminal
     """
     print("====================================")
     print("  Bienvenido a LegalMente v0.5    ")
