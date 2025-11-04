@@ -6,7 +6,7 @@ Las reglas se renombran sobre la marcha usando variables frescas para prevenir c
 import sys
 import knowledge_base #Base de conocimientos importada
 
-#contador de variables global, para renombrar variables
+#contador de variables, para renombrar variables
 VAR_COUNTER = 0
 
 
