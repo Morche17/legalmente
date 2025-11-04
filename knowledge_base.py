@@ -83,6 +83,8 @@ KB_LEGALMENTE = {
 
         # --- Hechos: Catálogo de Trámites Válidos (Regla 4 y 14) ---
         ('es_tramite_valido', 'acta_nacimiento'),
+        ('es_tramite_valido', 'acta_nacimiento_existente'),
+        ('es_tramite_valido', 'acta_nacimiento_recien_nacido'),
         ('es_tramite_valido', 'expedicion_licencia'),
         ('es_tramite_valido', 'revalidacion_licencia'),
         ('es_tramite_valido', 'refrendo_tarjeta_circulacion'),

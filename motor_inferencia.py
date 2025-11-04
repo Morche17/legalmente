@@ -216,18 +216,7 @@ if __name__ == "__main__":
     #   Requisito = identificacion_interesado
     #   Requisito = identificacion_gestor
 
-    # Caso 4: Probar Regla 6 (¿Puede 'juan' iniciar un trámite local?)
-    query4 = ('es_apto_para_tramite_local', 'juan_cano')
-    # sld_solve(KB_LEGALMENTE, query4)
-    # SALIDA ESPERADA: Verdadero (True)
 
-    # Caso 5: Consulta de Hechos (Obtener todos los costos del pasaporte)
-    query5 = ('costo', 'pasaporte', 'Vigencia', 'Precio')
-    # sld_solve(KB_LEGALMENTE, query5)
-    # SALIDA ESPERADA: 
-    #   Vigencia = 1_anio, Precio = 885.0
-    #   Vigencia = 3_anios, Precio = 1730.0
-    #   ... (etc.)
 
     # Caso 6: Consulta de Hechos (Obtener requisitos para alta de vehículo)
     query6 = ('requiere', 'alta_vehiculo', 'Requisito')
