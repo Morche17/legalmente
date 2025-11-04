@@ -5,8 +5,38 @@ import knowledge_base as kb       # Importamos tu Base de Conocimientos
 # Estas variables guardan el estado de la conversación
 KB_COMPLETA = kb.KB_LEGALMENTE.copy()
 HECHOS_SESION = [] # Aquí guardaremos hechos nuevos, como la residencia del usuario
-
+            
 # --- Implementación de Reglas de Validación (Capa de Aplicación) ---
+
+def listar_tramites_disponibles_no_residentes():
+    """
+    Lista todos los trámites que sí se pueden hacer fuera de Ensenada
+    """
+    print(f"\n","+"*10, " Lista de trámites ", "+"*10)
+    
+    # Consultando todos los trámites que no ocupan residencia local
+    query_no_residencia = ('no_requiere_residencia_local', 'Tramite')
+    
+    tramites_disponibles = []
+    
+    # Se usa el motor para encontrar todos los trámites con no_requiere_residencia_local
+    try:
+        for solucion, _ in motor.solve(KB_COMPLETA, [query_no_residencia], {}, []):
+            tramite = solucion.get('Tramite')
+            if tramite and tramite not in tramites_disponibles:
+                tramites_disponibles.append(tramite)
+    except:
+        pass
+    
+    if tramites_disponibles:
+        for i, tramite in enumerate(sorted(tramites_disponibles), 1):
+            print(f"{i:2d}. {tramite}")
+        
+    #     print(f"\nTotal: {len(tramites_disponibles)} trámites disponibles")
+    # else:
+    #     print("No se encontraron trámites disponibles sin restricción de residencia")
+    
+    return tramites_disponibles
 
 def validar_caracteres_tramite(tramite):
     """
@@ -52,24 +82,27 @@ def gestionar_residencia():
             HECHOS_SESION.append(('reside_en_ensenada', 'usuario_actual'))
             print("Validado. Tienes acceso a trámites locales.")
             print(f"\n","+"*10, " Lista de trámites ", "+"*10)
-            print('→ acta_nacimiento')
-            print('→ expedicion_licencia')
-            print('→ revalidacion_licencia')
-            print('→ refrendo_tarjeta_circulacion')
-            print('→ constancia_antecedentes_penales')
-            print('→ reposicion_licencia')
-            print('→ alta_vehiculo')
-            print('→ baja_vehiculo')
-            print('→ cambio_propietario_vehiculo')
-            print('→ reposicion_tarjeta_circulacion')
-            print('→ reposicion_placas_circulacion')
-            print('→ permiso_traslado_vehicular')
-            print('→ acta_matrimonio')
-            print('→ acta_defuncion')
-            print('→ pasaporte')
+            print('1. acta_nacimiento')
+            print('2. expedicion_licencia')
+            print('3. revalidacion_licencia')
+            print('4. refrendo_tarjeta_circulacion')
+            print('5. constancia_antecedentes_penales')
+            print('6. reposicion_licencia')
+            print('7. alta_vehiculo')
+            print('8. baja_vehiculo')
+            print('9. cambio_propietario_vehiculo')
+            print('10. reposicion_tarjeta_circulacion')
+            print('11. reposicion_placas_circulacion')
+            print('12. permiso_traslado_vehicular')
+            print('13. acta_matrimonio')
+            print('14. acta_defuncion')
+            print('15. pasaporte')
             break
         elif respuesta == 'n':
             print("Advertencia: No podrás realizar trámites que requieren residencia local.")
+            # Mostrar trámites disponibles para no residentes
+            tramites_disponibles = listar_tramites_disponibles_no_residentes()
+
             break
         else:
             # Implementa Regla 5 ("caracteres sin sentido" en la pregunta)
