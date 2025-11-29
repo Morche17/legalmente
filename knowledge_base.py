@@ -44,7 +44,6 @@ KB_LEGALMENTE = {
         },
 
         # --- 2. Reglas "Puente" de Unificación de Subtipos ---
-        # Estas reglas (diccionarios) SÍ pertenecen aquí.
         
         # Si preguntas por 'requiere' un trámite genérico, busca en sus subtipos.
         {
@@ -72,16 +71,15 @@ KB_LEGALMENTE = {
         }
     ],
     'hechos': [
-        # --- HECHOS "PUENTE" (Corregido: ahora están en 'hechos') ---
-        # Estos son HECHOS (tuplas) que definen la relación de subtipos.
+        # --- HECHOS "PUENTE" ---
         ('subtipo_de', 'acta_nacimiento_existente', 'acta_nacimiento'),
         ('subtipo_de', 'acta_nacimiento_recien_nacido', 'acta_nacimiento'),
         ('subtipo_de', 'acta_matrimonio_en_linea', 'acta_matrimonio'),
         ('subtipo_de', 'acta_matrimonio_presencial', 'acta_matrimonio'),
-        ('subtipo_de', 'cambio_propietario_pf', 'cambio_propietario_vehiculo'), # Persona Física
-        ('subtipo_de', 'cambio_propietario_pm', 'cambio_propietario_vehiculo'), # Persona Moral
+        ('subtipo_de', 'cambio_propietario_pf', 'cambio_propietario_vehiculo'), 
+        ('subtipo_de', 'cambio_propietario_pm', 'cambio_propietario_vehiculo'), 
 
-        # --- Hechos: Catálogo de Trámites Válidos (Regla 4 y 14) ---
+        # --- Hechos: Catálogo de Trámites Válidos ---
         ('es_tramite_valido', 'acta_nacimiento'),
         ('es_tramite_valido', 'acta_nacimiento_existente'),
         ('es_tramite_valido', 'acta_nacimiento_recien_nacido'),
@@ -100,7 +98,7 @@ KB_LEGALMENTE = {
         ('es_tramite_valido', 'acta_defuncion'),
         ('es_tramite_valido', 'pasaporte'),
 
-        # --- Hechos: Requisitos de Residencia (Regla 6) ---
+        # --- Hechos: Requisitos de Residencia ---
         ('requiere_residencia_local', 'expedicion_licencia'),
         ('requiere_residencia_local', 'revalidacion_licencia'),
         ('requiere_residencia_local', 'reposicion_licencia'),
@@ -111,7 +109,7 @@ KB_LEGALMENTE = {
         ('requiere_residencia_local', 'reposicion_tarjeta_circulacion'),
         ('requiere_residencia_local', 'reposicion_placas_circulacion'),
         ('requiere_residencia_local', 'permiso_traslado_vehicular'),
-        ('requiere_residencia_local', 'acta_matrimonio'), # Condición: casarse en Ensenada
+        ('requiere_residencia_local', 'acta_matrimonio'), 
 
         ('no_requiere_residencia_local', 'acta_nacimiento'),
         ('no_requiere_residencia_local', 'constancia_antecedentes_penales'),
@@ -119,7 +117,6 @@ KB_LEGALMENTE = {
         ('no_requiere_residencia_local', 'pasaporte'),
 
         # --- Hechos: Dependencias ---
-        # (Se agrupan los subtipos para que las reglas puente funcionen)
         ('dependencia', 'acta_nacimiento_existente', 'Registro Civil Ensenada'),
         ('dependencia', 'acta_nacimiento_recien_nacido', 'Registro Civil Ensenada'),
         ('dependencia', 'acta_matrimonio_presencial', 'Registro Civil Ensenada'),
@@ -133,13 +130,14 @@ KB_LEGALMENTE = {
         ('dependencia', 'alta_vehiculo', 'Recaudacion de Rentas Ensenada'),
         ('dependencia', 'baja_vehiculo', 'Recaudacion de Rentas Ensenada'),
         ('dependencia', 'reposicion_tarjeta_circulacion', 'Recaudacion de Rentas Ensenada'),
+        ('dependencia', 'reposicion_placas_circulacion', 'Recaudacion de Rentas Ensenada'), # AGREGADO
         ('dependencia', 'permiso_traslado_vehicular', 'Recaudacion de Rentas Ensenada'),
         ('dependencia', 'cambio_propietario_vehiculo', 'Subrecaudacion Auxiliar de Rentas Ensenada'),
         
         ('dependencia', 'pasaporte', 'Oficina de Enlace SRE Ensenada'),
         ('dependencia', 'constancia_antecedentes_penales', 'Fiscalia General del Estado'),
 
-        # --- Hechos: Costos (Regla 7 y 15) ---
+        # --- Hechos: Costos ---
         ('costo', 'expedicion_licencia', '3_años', 1077.80),
         ('costo', 'expedicion_licencia', '5_años', 1437.07),
         ('costo', 'revalidacion_licencia', '3_años', 956.67),
@@ -172,11 +170,14 @@ KB_LEGALMENTE = {
         ('costo', 'acta_matrimonio_en_linea', 'copia_certificada', 476.00),
         ('costo', 'acta_defuncion', 'primera_acta', 244.00),
         ('costo', 'acta_defuncion', 'copia_consecutiva', 122.00),
-        ('costo', 'reposicion_placas_circulacion', 'informacion_no_disponible', 0.00),
         
-        ('moneda_de_pago', 'mxn'), # Hecho para Regla 7
+        # AGREGADOS COSTOS QUE FALTABAN:
+        ('costo', 'reposicion_placas_circulacion', 'juego_placas', 1148.34),
+        ('costo', 'reposicion_placas_circulacion', 'baja_placas_anteriores', 384.62),
+        
+        ('moneda_de_pago', 'mxn'), 
 
-        # --- Hechos: Requisitos (Regla 2, 12) ---
+        # --- Hechos: Requisitos ---
         ('requiere', 'expedicion_licencia', 'identificacion_oficial_vigente'),
         ('requiere', 'expedicion_licencia', 'comprobante_domicilio'),
         ('requiere', 'expedicion_licencia', 'certificado_medico'),
@@ -189,6 +190,17 @@ KB_LEGALMENTE = {
         ('requiere', 'permiso_traslado_vehicular', 'revision_fisica_vehiculo'),
         ('requiere', 'permiso_traslado_vehicular', 'documentos_que_avalen_legalidad_vehiculo'),
         
+        # AGREGADOS REQUISITOS QUE FALTABAN:
+        ('requiere', 'reposicion_tarjeta_circulacion', 'identificacion_oficial_vigente'),
+        ('requiere', 'reposicion_tarjeta_circulacion', 'reporte_de_robo_o_extravio'),
+        ('requiere', 'reposicion_tarjeta_circulacion', 'constancia_de_no_infraccion'),
+        ('requiere', 'reposicion_tarjeta_circulacion', 'pago_de_derechos'),
+
+        ('requiere', 'reposicion_placas_circulacion', 'devolucion_laminas_restantes'),
+        ('requiere', 'reposicion_placas_circulacion', 'reporte_de_robo_o_extravio'),
+        ('requiere', 'reposicion_placas_circulacion', 'identificacion_oficial_propietario'),
+        ('requiere', 'reposicion_placas_circulacion', 'tarjeta_de_circulacion'),
+
         # Requisitos: Cambio de Propietario (subtipos)
         ('requiere', 'cambio_propietario_pf', 'factura_original'),
         ('requiere', 'cambio_propietario_pf', 'identificacion_original_con_foto'),
@@ -241,8 +253,6 @@ KB_LEGALMENTE = {
         ('requiere', 'acta_defuncion', 'identificaciones_testigos'),
         ('requiere', 'acta_defuncion', 'solicitud_acta_defuncion'),
         
-        # Hecho para trámite sin datos (para evitar 'Falso')
-        ('requiere', 'reposicion_placas_circulacion', 'informacion_no_disponible'),
         ('requiere', 'refrendo_tarjeta_circulacion', 'presentar_tarjeta_anterior'),
         ('requiere', 'alta_vehiculo', 'factura_o_titulo_vehiculo'),
         ('requiere', 'alta_vehiculo', 'identificacion_oficial'),
@@ -252,16 +262,16 @@ KB_LEGALMENTE = {
         ('requiere', 'pasaporte', 'CURP'),
         ('requiere', 'pasaporte', 'comprobante_pago_derechos'),
 
-        # --- Hechos: Gestores y Terceros (Regla 13) ---
-        ('permite_tercero', 'refrendo_tarjeta_circulacion'), # Representante legal
-        ('permite_tercero', 'alta_vehiculo'), # Representante legal
-        ('permite_tercero', 'baja_vehiculo'), # Representante empresa
-        ('permite_tercero', 'permiso_traslado_vehicular'), # Representante empresa
-        ('permite_tercero', 'permiso_traslado_vehicular'), # Conductor sustituto (con formato)
+        # --- Hechos: Gestores y Terceros ---
+        ('permite_tercero', 'refrendo_tarjeta_circulacion'), 
+        ('permite_tercero', 'alta_vehiculo'), 
+        ('permite_tercero', 'baja_vehiculo'), 
+        ('permite_tercero', 'permiso_traslado_vehicular'), 
+        ('permite_tercero', 'permiso_traslado_vehicular'), 
         
-        ('no_permite_tercero', 'constancia_antecedentes_penales'), # Solo interesado
-        ('no_permite_tercero', 'reposicion_tarjeta_circulacion'), # Solo interesado
-        ('no_permite_tercero', 'pasaporte'), # Solo interesado (o tutores para menores)
+        ('no_permite_tercero', 'constancia_antecedentes_penales'), 
+        ('no_permite_tercero', 'reposicion_tarjeta_circulacion'), 
+        ('no_permite_tercero', 'pasaporte'), 
 
         # --- Hechos: Modalidad y Citas ---
         ('modalidad_tramite', 'pasaporte', 'presencial_unicamente'),
@@ -269,12 +279,6 @@ KB_LEGALMENTE = {
         ('modalidad_tramite', 'acta_matrimonio_presencial', 'presencial'),
         ('requiere_cita', 'cambio_propietario_vehiculo'),
         ('metodo_cita', 'cambio_propietario_vehiculo', 'en_linea'),
-        
-        # --- Hechos: Vigencia ---
-        ('vigencia', 'refrendo_tarjeta_circulacion', 'variable'),
-        ('vigencia', 'constancia_antecedentes_penales', '3_meses'),
-        ('vigencia', 'reposicion_tarjeta_circulacion', 'variable_segun_pago'),
-        ('vigencia', 'permiso_traslado_vehicular', '15_dias'),
         
         # --- Hechos: Condiciones y Notas (Pasaporte) ---
         ('condicion', 'pasaporte', 'vigencia_1_año_solo_para_menores_3_años'),
@@ -321,5 +325,55 @@ KB_LEGALMENTE = {
         ('pago_no_disponible_en_linea', 'alta_vehiculo'),
         ('pago_no_disponible_en_linea', 'baja_vehiculo'),
         ('pago_no_disponible_en_linea', 'cambio_propietario_vehiculo'),
+
+        # --- HECHOS ESTANDARIZADOS PARA TARJETAS INFORMATIVAS (Vigencia y Modalidad) ---
+        
+        # 1. Registro Civil
+        ('vigencia', 'acta_nacimiento', 'permanente'),
+        ('modalidad_tramite', 'acta_nacimiento', 'hibrido_presencial_o_cajeros'),
+        
+        ('vigencia', 'acta_matrimonio', 'permanente'),
+        ('modalidad_tramite', 'acta_matrimonio', 'hibrido_presencial_o_linea'),
+        
+        ('vigencia', 'acta_defuncion', 'permanente'),
+        ('modalidad_tramite', 'acta_defuncion', 'presencial'),
+
+        # 2. Licencias
+        ('vigencia', 'expedicion_licencia', '3_o_5_años'),
+        ('modalidad_tramite', 'expedicion_licencia', 'presencial_(biometricos)'),
+
+        ('vigencia', 'revalidacion_licencia', '3_o_5_años'),
+        ('modalidad_tramite', 'revalidacion_licencia', 'presencial_o_app_oficial'),
+
+        ('vigencia', 'reposicion_licencia', 'misma_vigencia_restante'),
+        ('modalidad_tramite', 'reposicion_licencia', 'presencial'),
+
+        # 3. Vehicular
+        ('vigencia', 'alta_vehiculo', 'indefinida_(placas)'),
+        ('modalidad_tramite', 'alta_vehiculo', 'presencial_con_vehiculo'),
+
+        ('vigencia', 'baja_vehiculo', 'permanente'),
+        ('modalidad_tramite', 'baja_vehiculo', 'presencial'),
+
+        ('vigencia', 'cambio_propietario_vehiculo', 'indefinida'),
+        ('modalidad_tramite', 'cambio_propietario_vehiculo', 'presencial_con_cita'),
+
+        ('vigencia', 'refrendo_tarjeta_circulacion', '1_año_fiscal'),
+        ('modalidad_tramite', 'refrendo_tarjeta_circulacion', 'en_linea_o_app'),
+
+        ('vigencia', 'reposicion_tarjeta_circulacion', 'vigencia_original'),
+        ('modalidad_tramite', 'reposicion_tarjeta_circulacion', 'presencial'),
+
+        ('vigencia', 'reposicion_placas_circulacion', 'indefinida'),
+        ('modalidad_tramite', 'reposicion_placas_circulacion', 'presencial'),
+
+        ('vigencia', 'permiso_traslado_vehicular', '15_dias_naturales'),
+        ('modalidad_tramite', 'permiso_traslado_vehicular', 'presencial'),
+
+        # 4. Otros
+        ('vigencia', 'constancia_antecedentes_penales', '30_dias'),
+        ('modalidad_tramite', 'constancia_antecedentes_penales', 'en_linea'),
+
+        ('vigencia', 'pasaporte', '3_6_o_10_años'),
     ]
 }
