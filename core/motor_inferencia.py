@@ -4,9 +4,8 @@ La lógica de búsqueda es Depth-First Search (DFS) y el emparejamiento de patro
 Las reglas se renombran sobre la marcha usando variables frescas para prevenir conflictos
 """
 import sys
-import knowledge_base #Base de conocimientos importada
+import core.knowledge_base as knowledge_base #Base de conocimientos importada
 
-#contador de variables, para renombrar variables
 VAR_COUNTER = 0
 
 

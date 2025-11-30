@@ -7,19 +7,15 @@ gubernamentales en Ensenada, B.C., para Octubre de 2025.
 KB_LEGALMENTE = {
     'reglas': [
         # --- 1. Reglas Lógicas de Negocio ---
-
-        # Regla 15: "Si el trámite tiene costo, entonces deberá ser pagado."
         {
             'cabeza': ('requiere_pago', 'Tramite'),
             'cuerpo': [('costo', 'Tramite', 'Descripcion', 'Monto')]
         },
-        # Regla 1: "Si... no está disponible en línea, entonces debe asistir a Recaudación..."
         {
             'cabeza': ('lugar_de_pago_fisico', 'Tramite', 'Recaudacion de Rentas Ensenada'),
             'cuerpo': [('es_tramite_valido', 'Tramite'), 
                        ('pago_no_disponible_en_linea', 'Tramite')]
         },
-        # Regla 6: Lógica de Residencia
         {
             'cabeza': ('es_apto_para_tramite', 'Persona', 'Tramite'),
             'cuerpo': [('no_requiere_residencia_local', 'Tramite')]
@@ -29,7 +25,6 @@ KB_LEGALMENTE = {
             'cuerpo': [('requiere_residencia_local', 'Tramite'),
                        ('reside_en_ensenada', 'Persona')]
         },
-        # Regla 13: Lógica de Gestores / Terceros
         {
             'cabeza': ('requiere_para_tercero', 'Tramite', 'carta_poder_firmada'),
             'cuerpo': [('permite_tercero', 'Tramite')]
@@ -44,26 +39,21 @@ KB_LEGALMENTE = {
         },
 
         # --- 2. Reglas "Puente" de Unificación de Subtipos ---
-        
-        # Si preguntas por 'requiere' un trámite genérico, busca en sus subtipos.
         {
             'cabeza': ('requiere', 'TramiteGenerico', 'Requisito'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
                        ('requiere', 'TramiteEspecifico', 'Requisito')]
         },
-        # Si preguntas por 'costo'
         {
             'cabeza': ('costo', 'TramiteGenerico', 'Desc', 'Monto'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
                        ('costo', 'TramiteEspecifico', 'Desc', 'Monto')]
         },
-        # Si preguntas por 'dependencia'
         {
             'cabeza': ('dependencia', 'TramiteGenerico', 'Lugar'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
                        ('dependencia', 'TramiteEspecifico', 'Lugar')]
         },
-        # Si preguntas por 'condicion'
         {
             'cabeza': ('condicion', 'TramiteGenerico', 'Detalle'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
@@ -117,24 +107,23 @@ KB_LEGALMENTE = {
         ('no_requiere_residencia_local', 'pasaporte'),
 
         # --- Hechos: Dependencias ---
-        ('dependencia', 'acta_nacimiento_existente', 'Registro Civil Ensenada'),
-        ('dependencia', 'acta_nacimiento_recien_nacido', 'Registro Civil Ensenada'),
-        ('dependencia', 'acta_matrimonio_presencial', 'Registro Civil Ensenada'),
-        ('dependencia', 'acta_matrimonio_en_linea', 'Portal Web Gobierno BC'),
-        ('dependencia', 'acta_defuncion', 'Registro Civil Ensenada (Oficialia 01)'),
+        ('dependencia', 'acta_nacimiento_existente', 'Registro Civil'),
+        ('dependencia', 'acta_nacimiento_recien_nacido', 'Registro Civil'),
+        ('dependencia', 'acta_matrimonio_presencial', 'Registro Civil'),
+        ('dependencia', 'acta_defuncion', 'Registro Civil'),
         
-        ('dependencia', 'expedicion_licencia', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'revalidacion_licencia', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'reposicion_licencia', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'refrendo_tarjeta_circulacion', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'alta_vehiculo', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'baja_vehiculo', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'reposicion_tarjeta_circulacion', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'reposicion_placas_circulacion', 'Recaudacion de Rentas Ensenada'), # AGREGADO
-        ('dependencia', 'permiso_traslado_vehicular', 'Recaudacion de Rentas Ensenada'),
-        ('dependencia', 'cambio_propietario_vehiculo', 'Subrecaudacion Auxiliar de Rentas Ensenada'),
+        ('dependencia', 'expedicion_licencia', 'Recaudacion de Rentas'),
+        ('dependencia', 'revalidacion_licencia', 'Recaudacion de Rentas'),
+        ('dependencia', 'reposicion_licencia', 'Recaudacion de Rentas '),
+        ('dependencia', 'refrendo_tarjeta_circulacion', 'Recaudacion de Rentas'),
+        ('dependencia', 'alta_vehiculo', 'Recaudacion de Rentas'),
+        ('dependencia', 'baja_vehiculo', 'Recaudacion de Rentas'),
+        ('dependencia', 'reposicion_tarjeta_circulacion', 'Recaudacion de Rentas'),
+        ('dependencia', 'reposicion_placas_circulacion', 'Recaudacion de Rentas'),
+        ('dependencia', 'permiso_traslado_vehicular', 'Recaudacion de Rentas'),
+        ('dependencia', 'cambio_propietario_vehiculo', 'Subrecaudacion Auxiliar de Rentas'),
         
-        ('dependencia', 'pasaporte', 'Oficina de Enlace SRE Ensenada'),
+        ('dependencia', 'pasaporte', 'Oficina de Enlace SRE'),
         ('dependencia', 'constancia_antecedentes_penales', 'Fiscalia General del Estado'),
 
         # --- Hechos: Costos ---
@@ -170,11 +159,8 @@ KB_LEGALMENTE = {
         ('costo', 'acta_matrimonio_en_linea', 'copia_certificada', 476.00),
         ('costo', 'acta_defuncion', 'primera_acta', 244.00),
         ('costo', 'acta_defuncion', 'copia_consecutiva', 122.00),
-        
-        # AGREGADOS COSTOS QUE FALTABAN:
         ('costo', 'reposicion_placas_circulacion', 'juego_placas', 1148.34),
         ('costo', 'reposicion_placas_circulacion', 'baja_placas_anteriores', 384.62),
-        
         ('moneda_de_pago', 'mxn'), 
 
         # --- Hechos: Requisitos ---
@@ -189,13 +175,10 @@ KB_LEGALMENTE = {
         ('requiere', 'baja_vehiculo', 'formato_de_baja'),
         ('requiere', 'permiso_traslado_vehicular', 'revision_fisica_vehiculo'),
         ('requiere', 'permiso_traslado_vehicular', 'documentos_que_avalen_legalidad_vehiculo'),
-        
-        # AGREGADOS REQUISITOS QUE FALTABAN:
         ('requiere', 'reposicion_tarjeta_circulacion', 'identificacion_oficial_vigente'),
         ('requiere', 'reposicion_tarjeta_circulacion', 'reporte_de_robo_o_extravio'),
         ('requiere', 'reposicion_tarjeta_circulacion', 'constancia_de_no_infraccion'),
         ('requiere', 'reposicion_tarjeta_circulacion', 'pago_de_derechos'),
-
         ('requiere', 'reposicion_placas_circulacion', 'devolucion_laminas_restantes'),
         ('requiere', 'reposicion_placas_circulacion', 'reporte_de_robo_o_extravio'),
         ('requiere', 'reposicion_placas_circulacion', 'identificacion_oficial_propietario'),
@@ -268,7 +251,6 @@ KB_LEGALMENTE = {
         ('permite_tercero', 'baja_vehiculo'), 
         ('permite_tercero', 'permiso_traslado_vehicular'), 
         ('permite_tercero', 'permiso_traslado_vehicular'), 
-        
         ('no_permite_tercero', 'constancia_antecedentes_penales'), 
         ('no_permite_tercero', 'reposicion_tarjeta_circulacion'), 
         ('no_permite_tercero', 'pasaporte'), 
@@ -280,7 +262,7 @@ KB_LEGALMENTE = {
         ('requiere_cita', 'cambio_propietario_vehiculo'),
         ('metodo_cita', 'cambio_propietario_vehiculo', 'en_linea'),
         
-        # --- Hechos: Condiciones y Notas (Pasaporte) ---
+        # --- Hechos: Condiciones y Notas ---
         ('condicion', 'pasaporte', 'vigencia_1_año_solo_para_menores_3_años'),
         ('condicion', 'pasaporte', 'vigencia_10_años_no_aplica_trabajadores_agricolas'),
         ('condicion', 'pasaporte', 'tramite_menores_solo_con_patria_potestad_o_tutela'),
@@ -293,8 +275,6 @@ KB_LEGALMENTE = {
         ('banco_autorizado_pasaporte', 'banorte'),
         ('banco_autorizado_pasaporte', 'bbva'),
         ('banco_autorizado_pasaporte', 'santander'),
-        
-        # --- Hechos: Condiciones y Notas (Vehículos) ---
         ('tipo_pago_aceptado', 'Recaudacion de Rentas Ensenada', 'efectivo'),
         ('tipo_pago_aceptado', 'Recaudacion de Rentas Ensenada', 'cheque_certificado'),
         ('tipo_pago_aceptado', 'Recaudacion de Rentas Ensenada', 'tarjeta_debito'),
@@ -313,12 +293,8 @@ KB_LEGALMENTE = {
         ('condicion', 'baja_vehiculo', 'puede_ser_temporal_o_definitiva'),
         ('condicion', 'cambio_propietario_vehiculo', 'costo_es_variable'),
         ('condicion', 'cambio_propietario_vehiculo', 'tramite_obligatorio_en_venta_vehiculo_usado'),
-        
-        # --- Hechos: Condiciones y Notas (Registro Civil) ---
         ('condicion', 'acta_defuncion', 'tramitar_en_oficialia_01_si_fallecio_en_ensenada'),
         ('condicion', 'acta_matrimonio_presencial', 'contrayentes_deben_casarse_en_ensenada'),
-        
-        # --- Hechos: Pago en línea (Regla 1) ---
         ('pago_no_disponible_en_linea', 'expedicion_licencia'),
         ('pago_no_disponible_en_linea', 'revalidacion_licencia'),
         ('pago_no_disponible_en_linea', 'reposicion_licencia'),
@@ -326,54 +302,34 @@ KB_LEGALMENTE = {
         ('pago_no_disponible_en_linea', 'baja_vehiculo'),
         ('pago_no_disponible_en_linea', 'cambio_propietario_vehiculo'),
 
-        # --- HECHOS ESTANDARIZADOS PARA TARJETAS INFORMATIVAS (Vigencia y Modalidad) ---
-        
-        # 1. Registro Civil
         ('vigencia', 'acta_nacimiento', 'permanente'),
         ('modalidad_tramite', 'acta_nacimiento', 'hibrido_presencial_o_cajeros'),
-        
         ('vigencia', 'acta_matrimonio', 'permanente'),
         ('modalidad_tramite', 'acta_matrimonio', 'hibrido_presencial_o_linea'),
-        
         ('vigencia', 'acta_defuncion', 'permanente'),
         ('modalidad_tramite', 'acta_defuncion', 'presencial'),
-
-        # 2. Licencias
         ('vigencia', 'expedicion_licencia', '3_o_5_años'),
         ('modalidad_tramite', 'expedicion_licencia', 'presencial_(biometricos)'),
-
         ('vigencia', 'revalidacion_licencia', '3_o_5_años'),
         ('modalidad_tramite', 'revalidacion_licencia', 'presencial_o_app_oficial'),
-
         ('vigencia', 'reposicion_licencia', 'misma_vigencia_restante'),
         ('modalidad_tramite', 'reposicion_licencia', 'presencial'),
-
-        # 3. Vehicular
         ('vigencia', 'alta_vehiculo', 'indefinida_(placas)'),
         ('modalidad_tramite', 'alta_vehiculo', 'presencial_con_vehiculo'),
-
         ('vigencia', 'baja_vehiculo', 'permanente'),
         ('modalidad_tramite', 'baja_vehiculo', 'presencial'),
-
         ('vigencia', 'cambio_propietario_vehiculo', 'indefinida'),
         ('modalidad_tramite', 'cambio_propietario_vehiculo', 'presencial_con_cita'),
-
         ('vigencia', 'refrendo_tarjeta_circulacion', '1_año_fiscal'),
         ('modalidad_tramite', 'refrendo_tarjeta_circulacion', 'en_linea_o_app'),
-
         ('vigencia', 'reposicion_tarjeta_circulacion', 'vigencia_original'),
         ('modalidad_tramite', 'reposicion_tarjeta_circulacion', 'presencial'),
-
         ('vigencia', 'reposicion_placas_circulacion', 'indefinida'),
         ('modalidad_tramite', 'reposicion_placas_circulacion', 'presencial'),
-
         ('vigencia', 'permiso_traslado_vehicular', '15_dias_naturales'),
         ('modalidad_tramite', 'permiso_traslado_vehicular', 'presencial'),
-
-        # 4. Otros
         ('vigencia', 'constancia_antecedentes_penales', '30_dias'),
         ('modalidad_tramite', 'constancia_antecedentes_penales', 'en_linea'),
-
         ('vigencia', 'pasaporte', '3_6_o_10_años'),
     ]
 }

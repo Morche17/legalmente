@@ -1,161 +1,10 @@
-"""
-nota: modificar lo de ensenada en los que son foraneos
-
-NO LE MUEVAN A ESTE CODIGO PIBES
-                       uuuuuuuuuuuuuuuuuuuuu.
-                   .u$$$$$$$$$$$$$$$$$$$$$$$$$$W.
-                 u$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$Wu.
-               $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$i
-         `    $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-          .$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-         .$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-         #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-         W$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$u       #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$~
-$#      `"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$i        $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$        #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$         $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-#$.        $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$#
- $$      $iW$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$!
- $$i      $$$$$$$#"" `"'"#$$$$$$$$$$$$$$$$$#"'"'""#$$$$$$$$$$$$$$$W
- #$$W    `$$$#"            "       !$$$$$`           `"#$$$$$$$$$$#
-  $$$     `""                 ! !iuW$$$$$                 #$$$$$$$#
-  #$$    $u                  $   $$$$$$$                  $$$$$$$~
-   "#    #$$i.               #   $$$$$$$.                 `$$$$$$
-          $$$$$i.                "'"#$$$$i.               .$$$$#
-          $$$$$$$$!         .   `    $$$$$$$$$i           $$$$$
-          `$$$$$  $iWW   .uW`        #$$$$$$$$$W.       .$$$$$$#
-            "#$$$$$$$$$$$$#`          $$$$$$$$$$$iWiuuuW$$$$$$$$W
-               !#""    ""             `$$$$$$$##$$$$$$$$$$$$$$$$
-          i$$$$    .                   !$$$$$$ .$$$$$$$$$$$$$$$#
-         $$$$$$$$$$`                    $$$$$$$$$Wi$$$$$$#"#$$`
-         #$$$$$$$$$W.                   $$$$$$$$$$$#'  ``
-          `$$$$##$$$$!       i$u.  $. .i$$$$$$$$$#"/
-             "     `#W       $$$$$$$$$$$$$$$$$$$`      u$#
-                            W$$$$$$$$$$$$$$$$$$      $$$$W
-                            $$`!$$$##$$$$``$$$$      $$$$!
-                           i$" $$$$  $$#"`  ""'     W$$$$
-                                                   W$$$$!
-                      uW$$  uu  uu.  $$$  $$$Wu#   $$$$$$
-                     ~$$$$iu$$iu$$$uW$$! $$$$$$i .W$$$$$$
-             ..  !   "#$$$$$$$$$$##$$$$$$$$$$$$$$$$$$$$#"
-             $$W  $     "#$$$$$$$iW$$$$$$$$$$$$$$$$$$$$$W
-             $#`   `       ""#$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                              !$$$$$$$$$$$$$$$$$$$$$#`
-                              $$$$$$$$$$$$$$$$$$$$$$!
-                            $$$$$$$$$$$$$$$$$$$$$$$`
-                             $$$$$$$$$$$$$$$$$$$$
-
-"""
 import flet as ft
-import io
-import contextlib
-import sys
+# --- IMPORTS DE LOS PAQUETES NUEVOS ---
+from logic import sistema
+from ui import elementos
 
-# --- IMPORTS REALES ---
-try:
-    import motor_inferencia as motor
-    import knowledge_base as kb
-except ImportError:
-    print("ERROR CRÍTICO: No se encontraron los archivos 'motor_inferencia.py' o 'knowledge_base.py'.")
-    sys.exit(1)
-
-# --- CONFIGURACIÓN BASE ---
-KB_BASE = kb.KB_LEGALMENTE.copy()
-HECHOS_SESION = []
-
-TRAMITES_RESIDENTES = [
-    'acta_nacimiento', 'expedicion_licencia', 'revalidacion_licencia',
-    'refrendo_tarjeta_circulacion', 'constancia_antecedentes_penales',
-    'reposicion_licencia', 'alta_vehiculo', 'baja_vehiculo',
-    'cambio_propietario_vehiculo', 'reposicion_tarjeta_circulacion',
-    'reposicion_placas_circulacion', 'permiso_traslado_vehicular',
-    'acta_matrimonio', 'acta_defuncion', 'pasaporte'
-]
-
-TRAMITES_NO_RESIDENTES = [
-    'acta_nacimiento', 
-    'constancia_antecedentes_penales', 
-    'acta_defuncion', 
-    'pasaporte'
-]
-
-# --- LÓGICA DE PROCESAMIENTO (BACKEND) ---
-
-def limpiar_respuesta_motor(texto_crudo):
-    lineas = texto_crudo.split('\n')
-    lineas_limpias = []
-    palabras_prohibidas = ["Iniciando", "Solución", "Derivación", "derivación", "paso a paso", "-----", "Sustituciones", "Query:", "Resultado:", "Unifica", "Aplica", "HECHO:", "REGLA:"]
-
-    for l in lineas:
-        l = l.strip()
-        if not l: continue
-        if any(x in l for x in palabras_prohibidas): continue
-        if "=" in l:
-            partes = l.split("=")
-            if len(partes) > 1: l = partes[1].strip()
-        l = l.replace("_", " ").capitalize()
-        if lineas_limpias and lineas_limpias[-1] == l: continue
-        lineas_limpias.append(l)
-
-    return "\n".join(lineas_limpias) if lineas_limpias else "N/A"
-
-def procesar_costos_inteligente(texto_crudo):
-    lineas = texto_crudo.split('\n')
-    items_formateados = []
-    temp_desc = None
-    temp_monto = None
-    
-    for l in lineas:
-        l = l.strip()
-        if not l: continue
-        if "Descripcion =" in l:
-            temp_desc = l.split("=")[1].strip().replace("_", " ").capitalize()
-        elif "Monto =" in l:
-            temp_monto = l.split("=")[1].strip()
-        if temp_desc and temp_monto:
-            items_formateados.append(f"{temp_desc}: ${temp_monto} MXN")
-            temp_desc = None
-            temp_monto = None
-            
-    if not items_formateados:
-        return [limpiar_respuesta_motor(texto_crudo)]
-    return items_formateados
-
-def consultar_motor_real(tramite, predicado, variable_buscada='Dato'):
-    kb_actual = KB_BASE.copy()
-    kb_actual['hechos'] = KB_BASE['hechos'] + HECHOS_SESION
-    
-    if predicado == 'costo': query = ('costo', tramite, 'Descripcion', 'Monto')
-    elif predicado == 'requiere': query = ('requiere', tramite, 'Requisito')
-    else: query = (predicado, tramite, variable_buscada)
-
-    f = io.StringIO()
-    try:
-        with contextlib.redirect_stdout(f): motor.sld_solve(kb_actual, query)
-        raw = f.getvalue()
-    except: raw = ""
-    return raw
-
-# --- COMPONENTES UI ---
-
-def crear_tarjeta_info(titulo, valor, icono, color_icono):
-    return ft.Container(
-        content=ft.Column([
-            ft.Icon(icono, color=color_icono, size=28),
-            ft.Text(titulo, size=10, color=ft.Colors.GREY_600, weight="bold"),
-            ft.Text(valor, size=12, weight="w600", color=ft.Colors.BLACK87, text_align=ft.TextAlign.CENTER)
-        ], spacing=5, horizontal_alignment=ft.CrossAxisAlignment.CENTER),
-        padding=10,
-        bgcolor=ft.Colors.WHITE,
-        border_radius=12,
-        border=ft.border.all(1, ft.Colors.GREY_200),
-        width=140,
-        height=120,
-        alignment=ft.alignment.center,
-        shadow=ft.BoxShadow(blur_radius=10, color=ft.Colors.GREY_100)
-    )
+# Inicializamos el backend (ahora carga la info automáticamente)
+backend = sistema.BackendLegal()
 
 # --- APP PRINCIPAL ---
 
@@ -173,9 +22,10 @@ def main(page: ft.Page):
     # --- PANEL DERECHO (DASHBOARD) ---
     lbl_titulo_tramite = ft.Text("Selecciona un trámite", size=24, weight="bold", color=ft.Colors.INDIGO, text_align=ft.TextAlign.CENTER)
     
-    card_dependencia = crear_tarjeta_info("DEPENDENCIA", "-", ft.Icons.ACCOUNT_BALANCE, ft.Colors.BLUE)
-    card_vigencia = crear_tarjeta_info("VIGENCIA", "-", ft.Icons.TIMER, ft.Colors.ORANGE)
-    card_modalidad = crear_tarjeta_info("MODALIDAD", "-", ft.Icons.LAPTOP_MAC, ft.Colors.PURPLE)
+    # Importamos tarjetas visuales
+    card_dependencia = elementos.crear_tarjeta_info("DEPENDENCIA", "-", ft.Icons.ACCOUNT_BALANCE, ft.Colors.BLUE)
+    card_vigencia = elementos.crear_tarjeta_info("VIGENCIA", "-", ft.Icons.TIMER, ft.Colors.ORANGE)
+    card_modalidad = elementos.crear_tarjeta_info("MODALIDAD", "-", ft.Icons.LAPTOP_MAC, ft.Colors.PURPLE)
     
     row_resumen = ft.Row(
         [card_dependencia, card_vigencia, card_modalidad], 
@@ -211,13 +61,14 @@ def main(page: ft.Page):
     def actualizar_panel_central(tramite):
         row_resumen.visible = True
         
-        raw_dep = consultar_motor_real(tramite, 'dependencia', 'Lugar')
-        raw_vig = consultar_motor_real(tramite, 'vigencia', 'Tiempo')
-        raw_mod = consultar_motor_real(tramite, 'modalidad_tramite', 'Modo')
+        # Consultas al backend
+        raw_dep = backend.consultar_motor_real(tramite, 'dependencia', 'Lugar')
+        raw_vig = backend.consultar_motor_real(tramite, 'vigencia', 'Tiempo')
+        raw_mod = backend.consultar_motor_real(tramite, 'modalidad_tramite', 'Modo')
 
-        dep = limpiar_respuesta_motor(raw_dep)
-        vig = limpiar_respuesta_motor(raw_vig)
-        mod = limpiar_respuesta_motor(raw_mod)
+        dep = backend.limpiar_respuesta_motor(raw_dep)
+        vig = backend.limpiar_respuesta_motor(raw_vig)
+        mod = backend.limpiar_respuesta_motor(raw_mod)
 
         card_dependencia.content.controls[2].value = dep if dep != "N/A" else "No especif."
         card_vigencia.content.controls[2].value = vig if vig != "N/A" else "Variable"
@@ -239,12 +90,12 @@ def main(page: ft.Page):
         tramite = state["tramite_seleccionado"]
         if not tramite: return
         
-        texto_raw = consultar_motor_real(tramite, tipo)
+        texto_raw = backend.consultar_motor_real(tramite, tipo)
         contenedor_detalles.controls.clear()
         items_visuales = []
         
         if tipo == 'costo':
-            lista_costos = procesar_costos_inteligente(texto_raw)
+            lista_costos = backend.procesar_costos_inteligente(texto_raw)
             for costo in lista_costos:
                 items_visuales.append(
                     ft.Container(
@@ -259,7 +110,7 @@ def main(page: ft.Page):
                     )
                 )
         else:
-            texto_limpio = limpiar_respuesta_motor(texto_raw)
+            texto_limpio = backend.limpiar_respuesta_motor(texto_raw)
             for l in texto_limpio.split('\n'):
                 if l.strip() and l != "N/A":
                     items_visuales.append(
@@ -298,7 +149,8 @@ def main(page: ft.Page):
 
     def cargar_dashboard():
         page.clean()
-        lista = TRAMITES_RESIDENTES if state["es_residente"] else TRAMITES_NO_RESIDENTES
+        # Aquí usamos las listas dinámicas del backend
+        lista = backend.TRAMITES_RESIDENTES if state["es_residente"] else backend.TRAMITES_NO_RESIDENTES
         grid_tramites.controls.clear()
         for t in lista:
             grid_tramites.controls.append(
@@ -334,8 +186,11 @@ def main(page: ft.Page):
 
     def ir_a_dashboard(residente):
         state["es_residente"] = residente
-        global HECHOS_SESION
-        HECHOS_SESION = [('reside_en_ensenada', 'usuario_actual')] if residente else []
+        # Actualizamos la variable de hechos en el backend
+        if residente:
+            backend.HECHOS_SESION = [('reside_en_ensenada', 'usuario_actual')]
+        else:
+            backend.HECHOS_SESION = []
         cargar_dashboard()
 
     def cargar_pantalla_residencia():
@@ -354,12 +209,11 @@ def main(page: ft.Page):
             alignment=ft.alignment.center, expand=True, bgcolor=ft.Colors.INDIGO_50
         ))
 
-    # Lógica de validación de edad antigua y segura (yo digo)
+    # Lógica de validación de edad
     def validar_edad(es_mayor):
         if es_mayor:
             cargar_pantalla_residencia()
         else:
-            # En lugar de cerrar la ventana, mostramos la pantalla de bloqueo
             page.clean()
             page.add(ft.Container(
                 content=ft.Column([
@@ -380,7 +234,6 @@ def main(page: ft.Page):
                 ft.Text("Verificación de mayoría de edad", size=16),
                 ft.Container(height=20),
                 ft.Row([
-                    # Llamamos a validar_edad(False) en lugar de intentar cerrar la ventana
                     ft.OutlinedButton("Soy menor", on_click=lambda _: validar_edad(False)),
                     ft.ElevatedButton("Soy mayor de 18", on_click=lambda _: validar_edad(True))
                 ], alignment=ft.MainAxisAlignment.CENTER)
