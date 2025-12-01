@@ -5,7 +5,6 @@ Las reglas se renombran sobre la marcha usando variables frescas para prevenir c
 """
 import sys
 import core.knowledge_base as knowledge_base #Base de conocimientos importada
-
 VAR_COUNTER = 0
 
 
