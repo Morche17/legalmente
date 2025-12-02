@@ -131,6 +131,8 @@ def solve(kb, lista_queries, sustituciones, ruta_derivacion, contador):
     Algoritmo de búsqueda DFS (Depth-First Search).
     Motor de resolución SLD recursivo (generador).
     Busca soluciones que satisfagan la lista de queries (metas).
+
+    Este es el nucleo del motor de inferencia. en este punto, el motor utiliza las reglas para inferencia lógica.
     """
     # Si no hay más queries, hemos encontrado una solución
     if not lista_queries:
