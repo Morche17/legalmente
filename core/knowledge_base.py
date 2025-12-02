@@ -8,53 +8,64 @@ KB_LEGALMENTE = {
     'reglas': [
         # --- 1. Reglas Lógicas de Negocio ---
         {
+            #Si un trámite tiene costo, entonces el trámite requiere pago.
             'cabeza': ('requiere_pago', 'Tramite'),
             'cuerpo': [('costo', 'Tramite', 'Descripcion', 'Monto')]
         },
         {
+            #Si el trámite es válido y el pago no está disponible en línea, entonces el lugar de pago físico del trámite es Recaudación de Rentas Ensenada.
             'cabeza': ('lugar_de_pago_fisico', 'Tramite', 'Recaudacion de Rentas Ensenada'),
             'cuerpo': [('es_tramite_valido', 'Tramite'), 
                        ('pago_no_disponible_en_linea', 'Tramite')]
         },
         {
+            #Si un trámite no requiere residencia local, entonces cualquier persona es apta para realizar el trámite.
             'cabeza': ('es_apto_para_tramite', 'Persona', 'Tramite'),
             'cuerpo': [('no_requiere_residencia_local', 'Tramite')]
         },
         {
+            #Si un trámite requiere residencia local y la persona reside en Ensenada, entonces la persona es apta para realizar el trámite.
             'cabeza': ('es_apto_para_tramite', 'Persona', 'Tramite'),
             'cuerpo': [('requiere_residencia_local', 'Tramite'),
                        ('reside_en_ensenada', 'Persona')]
         },
         {
+            #Si el trámite permite que un tercero lo realice, entonces se requiere carta poder firmada para realizar el trámite como tercero.
             'cabeza': ('requiere_para_tercero', 'Tramite', 'carta_poder_firmada'),
             'cuerpo': [('permite_tercero', 'Tramite')]
         },
         {
+            #Si el trámite permite que un tercero lo realice, entonces se requiere identificación oficial del interesado.
             'cabeza': ('requiere_para_tercero', 'Tramite', 'identificacion_oficial_interesado'),
             'cuerpo': [('permite_tercero', 'Tramite')]
         },
         {
+            #Si el trámite permite que un tercero lo realice, entonces se requiere identificación oficial del gestor.
             'cabeza': ('requiere_para_tercero', 'Tramite', 'identificacion_oficial_gestor'),
             'cuerpo': [('permite_tercero', 'Tramite')]
         },
 
         # --- 2. Reglas "Puente" de Unificación de Subtipos ---
         {
+            #Si un trámite específico es subtipo de un trámite genérico y el trámite específico requiere cierto requisito, entonces el trámite genérico también requiere ese requisito.
             'cabeza': ('requiere', 'TramiteGenerico', 'Requisito'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
                        ('requiere', 'TramiteEspecifico', 'Requisito')]
         },
         {
+            #Si un trámite específico es subtipo de un trámite genérico y el trámite específico tiene un costo con cierta descripción y monto, entonces el trámite genérico también tiene ese costo.
             'cabeza': ('costo', 'TramiteGenerico', 'Desc', 'Monto'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
                        ('costo', 'TramiteEspecifico', 'Desc', 'Monto')]
         },
         {
+            #Si un trámite específico es subtipo de un trámite genérico y el trámite específico depende de un cierto lugar, entonces el trámite genérico también depende de ese lugar.
             'cabeza': ('dependencia', 'TramiteGenerico', 'Lugar'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
                        ('dependencia', 'TramiteEspecifico', 'Lugar')]
         },
         {
+            #Si un trámite específico es subtipo de un trámite genérico y el trámite específico tiene una condición con cierto detalle, entonces el trámite genérico también tiene esa condición.
             'cabeza': ('condicion', 'TramiteGenerico', 'Detalle'),
             'cuerpo': [('subtipo_de', 'TramiteEspecifico', 'TramiteGenerico'),
                        ('condicion', 'TramiteEspecifico', 'Detalle')]
